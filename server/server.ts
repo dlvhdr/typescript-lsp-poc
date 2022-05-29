@@ -9,8 +9,8 @@ import { launch } from "./launch";
 
 const app = express();
 app.use(express.static(path.join(__dirname, "../statics")));
-const server = app.listen(3000, () => {
-  console.log("Started server on port 3000");
+const server = app.listen(3001, () => {
+  console.log("Started server on port 3001");
 });
 const wss = new ws.Server({
   noServer: true,
@@ -20,6 +20,7 @@ const wss = new ws.Server({
 server.on(
   "upgrade",
   (request: http.IncomingMessage, socket: net.Socket, head: Buffer) => {
+    console.log("Got request");
     const pathname = request.url ? url.parse(request.url).pathname : undefined;
     console.log("pathname", pathname);
     if (pathname === "/sampleServer") {
@@ -38,7 +39,7 @@ server.on(
         };
         // launch the server when the web socket is opened
         if (webSocket.readyState === webSocket.OPEN) {
-          launch();
+          launch(socket);
           console.log("Launched typescript language server");
         } else {
           console.log("Will launch typescript language server");
