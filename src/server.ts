@@ -38,7 +38,7 @@ server.on(
         };
         // launch the server when the web socket is opened
         if (webSocket.readyState === webSocket.OPEN) {
-          launch();
+          launch(socket);
           console.log("Launched typescript language server");
         } else {
           console.log("Will launch typescript language server");
