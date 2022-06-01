@@ -1,0 +1,34 @@
+[18:13:14.914] Global cache location '/Users/dolevh/.cache/typescript/4.7', safe file path '/users/dolevh/code/playground/wix-code-lsp-poc/server/node_modules/typescript/lib/typingsafelist.json', types map path /users/dolevh/code/playground/wix-code-lsp-poc/server/node_modules/typescript/lib/typesmap.json
+[18:13:14.916] Processing cache location '/Users/dolevh/.cache/typescript/4.7'
+[18:13:14.916] Trying to find '/Users/dolevh/.cache/typescript/4.7/package.json'...
+[18:13:14.917] Loaded content of '/Users/dolevh/.cache/typescript/4.7/package.json': {"private":true,"dependencies":{"types-registry":"^0.1.594"},"devDependencies":{"@types/babel__core":"^7.1.19","@types/body-parser":"^1.19.2","@types/depd":"^1.1.32","@types/encodeurl":"^1.0.0","@types/escape-html":"^1.0.2","@types/express":"^4.17.13","@types/express-serve-static-core":"^4.17.28","@types/node":"^17.0.36","@types/parseurl":"^1.3.1","@types/qs":"^6.9.7","@types/send":"^0.17.1","@types/serve-static":"^1.13.10","@types/twig":"^1.12.9","@types/vscode":"^1.67.0","@types/ws":"^8.5.3"}}
+[18:13:14.917] Loaded content of '/Users/dolevh/.cache/typescript/4.7/package-lock.json'
+[18:13:14.929] Adding entry into typings cache: 'babel__core' => '/Users/dolevh/.cache/typescript/4.7/node_modules/@types/babel__core/index.d.ts'
+[18:13:14.931] Adding entry into typings cache: 'body-parser' => '/Users/dolevh/.cache/typescript/4.7/node_modules/@types/body-parser/index.d.ts'
+[18:13:14.933] Adding entry into typings cache: 'depd' => '/Users/dolevh/.cache/typescript/4.7/node_modules/@types/depd/index.d.ts'
+[18:13:14.935] Adding entry into typings cache: 'encodeurl' => '/Users/dolevh/.cache/typescript/4.7/node_modules/@types/encodeurl/index.d.ts'
+[18:13:14.937] Adding entry into typings cache: 'escape-html' => '/Users/dolevh/.cache/typescript/4.7/node_modules/@types/escape-html/index.d.ts'
+[18:13:14.938] Adding entry into typings cache: 'express' => '/Users/dolevh/.cache/typescript/4.7/node_modules/@types/express/index.d.ts'
+[18:13:14.940] Adding entry into typings cache: 'express-serve-static-core' => '/Users/dolevh/.cache/typescript/4.7/node_modules/@types/express-serve-static-core/index.d.ts'
+[18:13:14.943] Adding entry into typings cache: 'node' => '/Users/dolevh/.cache/typescript/4.7/node_modules/@types/node/index.d.ts'
+[18:13:14.944] Adding entry into typings cache: 'parseurl' => '/Users/dolevh/.cache/typescript/4.7/node_modules/@types/parseurl/index.d.ts'
+[18:13:14.946] Adding entry into typings cache: 'qs' => '/Users/dolevh/.cache/typescript/4.7/node_modules/@types/qs/index.d.ts'
+[18:13:14.947] Adding entry into typings cache: 'send' => '/Users/dolevh/.cache/typescript/4.7/node_modules/@types/send/index.d.ts'
+[18:13:14.948] Adding entry into typings cache: 'serve-static' => '/Users/dolevh/.cache/typescript/4.7/node_modules/@types/serve-static/index.d.ts'
+[18:13:14.950] Adding entry into typings cache: 'twig' => '/Users/dolevh/.cache/typescript/4.7/node_modules/@types/twig/index.d.ts'
+[18:13:14.951] Adding entry into typings cache: 'vscode' => '/Users/dolevh/.cache/typescript/4.7/node_modules/@types/vscode/index.d.ts'
+[18:13:14.952] Adding entry into typings cache: 'ws' => '/Users/dolevh/.cache/typescript/4.7/node_modules/@types/ws/index.d.ts'
+[18:13:14.952] Finished processing cache location '/Users/dolevh/.cache/typescript/4.7'
+[18:13:14.953] Process id: 15716
+[18:13:14.953] NPM location: /Users/dolevh/.local/share/fnm/node-versions/v16.15.0/installation/bin/npm (explicit '--npmLocation' not  provided)
+[18:13:14.953] validateDefaultNpmLocation: false
+[18:13:14.953] Npm config file: /Users/dolevh/.cache/typescript/4.7/package.json
+[18:13:14.953] Updating types-registry npm package...
+[18:13:14.954] Exec: /Users/dolevh/.local/share/fnm/node-versions/v16.15.0/installation/bin/npm install --ignore-scripts types-registry@latest
+[18:13:15.871]     Succeeded. stdout:
+    
+    up to date, audited 27 packages in 716ms
+
+found 0 vulnerabilities
+
+[18:13:15.871] Updated types-registry npm package

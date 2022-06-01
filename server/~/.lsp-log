@@ -1,0 +1,19 @@
+Info 0    [16:51:47.375] Starting TS Server
+Info 1    [16:51:47.376] Version: 4.7.2
+Info 2    [16:51:47.376] Arguments: /Users/dolevh/.local/share/fnm/node-versions/v16.15.0/installation/bin/node /Users/dolevh/code/playground/wix-code-lsp-poc/server/node_modules/typescript/lib/tsserver.js --logFile /Users/dolevh/code/playground/wix-code-lsp-poc/server/~/.lsp-log --logVerbosity verbose --cancellationPipeName /private/var/folders/nz/4t7_fbbs781fgljt4p7k5fdm0000gn/T/6a51a0bcb094f72e668ee6826591b194/tscancellation*
+Info 3    [16:51:47.376] Platform: darwin NodeVersion: 16 CaseSensitive: false
+Info 4    [16:51:47.376] ServerMode: undefined syntaxOnly: false hasUnknownServerMode: undefined
+Info 5    [16:51:47.383] Binding...
+Info 6    [16:51:47.391] request:
+    {"command":"configure","seq":1,"type":"request","arguments":{"formatOptions":{"newLineCharacter":"\n"},"preferences":{"allowIncompleteCompletions":true,"allowRenameOfImportPath":true,"allowTextChangesInNewFiles":true,"displayPartsForJSDoc":true,"generateReturnInDocTemplate":true,"includeAutomaticOptionalChainCompletions":true,"includeCompletionsForImportStatements":true,"includeCompletionsForModuleExports":true,"includeCompletionsWithClassMemberSnippets":true,"includeCompletionsWithInsertText":true,"includeCompletionsWithSnippetText":true,"jsxAttributeCompletionStyle":"auto"}}}
+Info 7    [16:51:47.391] Format host information updated
+Info 8    [16:51:47.391] response:
+    {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
+Perf 9    [16:51:47.392] 1::configure: async elapsed time (in milliseconds) 1.4930
+Info 10   [16:51:47.392] request:
+    {"command":"compilerOptionsForInferredProjects","seq":2,"type":"request","arguments":{"options":{"module":"CommonJS","target":"ES2016","jsx":"Preserve","allowJs":true,"allowSyntheticDefaultImports":true,"allowNonTsExtensions":true}}}
+Perf 11   [16:51:47.393] 2::compilerOptionsForInferredProjects: elapsed time (in milliseconds) 0.3985
+Info 12   [16:51:47.393] response:
+    {"seq":0,"type":"response","command":"compilerOptionsForInferredProjects","request_seq":2,"success":true,"body":true}
+Info 13   [16:51:47.394] event:
+    {"seq":0,"type":"event","event":"typingsInstallerPid","body":{"pid":67446}}
