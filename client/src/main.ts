@@ -33,6 +33,7 @@ import {
 } from "@codingame/monaco-jsonrpc";
 import monacoTokensProvider from "./monarch";
 import { createModel } from "./models";
+import { TextModelService } from "./TextModelService";
 
 monaco.languages.register({
   id: "typescript",
@@ -50,9 +51,11 @@ const root = document.querySelector<HTMLDivElement>("#root")!;
 
 // const allModels = [];
 
-const editor = monaco.editor.create(root, {});
+const editor = monaco.editor.create(root, undefined, {
+  textModelService: new TextModelService(),
+});
 
-const rootUri = "file:///Users/dolevh/code/personal/hebrew-touch-typing/";
+const rootUri = "file:///Users/dolevh/code/personal/hebrew-touch-typing";
 MonacoServices.install(monaco, {
   rootUri,
 });
@@ -69,7 +72,9 @@ webSocket.onopen = async () => {
   });
   await languageClient.start();
   reader.onClose(() => languageClient.stop());
-  const newModel = await createModel(editor, "src/index.tsx");
+  const newModel = await createModel(
+    monaco.Uri.parse(`${rootUri}/src/index.tsx`)
+  );
   editor.setModel(newModel!);
 };
 
@@ -85,22 +90,6 @@ function createLanguageClient(
       errorHandler: {
         error: () => ({ action: ErrorAction.Continue }),
         closed: () => ({ action: CloseAction.DoNotRestart }),
-      },
-      middleware: {
-        resolveDocumentLink: (link) => {
-          console.log(`[DEBUG] link ${link}`);
-        },
-        resolveCodeAction: (action) => {
-          console.log(`[DEBUG] link ${action}`, action);
-        },
-        provideDefinition: async (document, position, token, next) => {
-          // console.log("wow all", { document, position, token, next });
-          const res = await next(document, position, token);
-          const uri: string = res[0].uri;
-          const relUri = uri.replace(rootUri, "");
-          await createModel(editor, relUri);
-          return res;
-        },
       },
     },
     // create a language client connection from the JSON RPC connection on demand
