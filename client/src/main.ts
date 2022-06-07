@@ -31,6 +31,8 @@ import {
   WebSocketMessageReader,
   WebSocketMessageWriter,
 } from "@codingame/monaco-jsonrpc";
+import monacoTokensProvider from "./monarch";
+import { createModel } from "./models";
 
 monaco.languages.register({
   id: "typescript",
@@ -39,54 +41,25 @@ monaco.languages.register({
   mimetypes: ["text/typescript"],
 });
 
+monaco.languages.setMonarchTokensProvider(
+  "typescript",
+  monacoTokensProvider as monaco.languages.IMonarchLanguage
+);
+
 const root = document.querySelector<HTMLDivElement>("#root")!;
-monaco.editor.create(root, {
-  model: monaco.editor.createModel(
-    `
-import {ExerciseType} from '../constants/practiceAndReviewLetterSets';
-import {Exercise, LettersExercise} from './generateLetterExercises';
 
-export const getNumOfCorrectCharacters = (
-  input: string,
-  text: string,
-): number => {
-  return Array.from(input).reduce((numCorrectCharacters, character, index) => {
-    return numCorrectCharacters + (text.charAt(index) === character ? 1 : 0);
-  }, 0);
-};
+// const allModels = [];
 
-export const isLettersExercise = (exercise: Exercise): boolean => {
-  return (
-    exercise.type === ExerciseType.PRACTICE ||
-    exercise.type === ExerciseType.REVIEW
-  );
-};
+const editor = monaco.editor.create(root, {});
 
-export const assertLettersExercise = (
-  exercise: Exercise,
-): LettersExercise | never => {
-  if (isLettersExercise(exercise)) {
-    return exercise as LettersExercise;
-  }
-
-  throw new Error('Expected a LettersExercise');
-};
-`,
-    undefined,
-    monaco.Uri.parse(
-      "file:///Users/dolevh/code/personal/hebrew-touch-typing/src/utils/exerciseUtils.ts"
-    )
-  ),
-});
-
+const rootUri = "file:///Users/dolevh/code/personal/hebrew-touch-typing/";
 MonacoServices.install(monaco, {
-  rootUri: "file:///Users/dolevh/code/personal/hebrew-touch-typing",
+  rootUri,
 });
 
 const url = createUrl("localhost", 3001, "/sampleServer");
-console.log("URL", url);
 const webSocket = new WebSocket(url);
-webSocket.onopen = () => {
+webSocket.onopen = async () => {
   const socket = toSocket(webSocket);
   const reader = new WebSocketMessageReader(socket);
   const writer = new WebSocketMessageWriter(socket);
@@ -94,11 +67,10 @@ webSocket.onopen = () => {
     reader,
     writer,
   });
-  languageClient.start();
+  await languageClient.start();
   reader.onClose(() => languageClient.stop());
-
-  console.log("wow", monaco.editor.getModels());
-  console.log("wow", monaco.editor.setModel);
+  const newModel = await createModel(editor, "src/index.tsx");
+  editor.setModel(newModel!);
 };
 
 function createLanguageClient(
@@ -113,6 +85,22 @@ function createLanguageClient(
       errorHandler: {
         error: () => ({ action: ErrorAction.Continue }),
         closed: () => ({ action: CloseAction.DoNotRestart }),
+      },
+      middleware: {
+        resolveDocumentLink: (link) => {
+          console.log(`[DEBUG] link ${link}`);
+        },
+        resolveCodeAction: (action) => {
+          console.log(`[DEBUG] link ${action}`, action);
+        },
+        provideDefinition: async (document, position, token, next) => {
+          // console.log("wow all", { document, position, token, next });
+          const res = await next(document, position, token);
+          const uri: string = res[0].uri;
+          const relUri = uri.replace(rootUri, "");
+          await createModel(editor, relUri);
+          return res;
+        },
       },
     },
     // create a language client connection from the JSON RPC connection on demand
