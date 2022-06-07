@@ -1,9 +1,6 @@
 # wix-code-lsp-poc
 
-<aside>
 🗣 [monaco-editor](https://github.com/microsoft/monaco-editor) is the code editor which powers [VS Code](https://github.com/microsoft/vscode), with the features better described [here](https://code.visualstudio.com/docs/editor/editingevolved).
-
-</aside>
 
 ## POC Progress
 
@@ -28,14 +25,14 @@ The webworker monaco uses is a limited Typescript language client. The language 
 # Execution Plan
 
 - Start the [Typescript language server](https://github.com/typescript-language-server/typescript-language-server) locally
-- Register monaco providers (*completions provider etc.*) using something like the https://github.com/TypeFox/monaco-languageclient/ and https://github.com/CodinGame/monaco-jsonrpc libraries
+- Register monaco providers (*completions provider etc.*) using something like the [monaco-languageclient](https://github.com/TypeFox/monaco-languageclient/) and [monaco-jsonrpc](https://github.com/CodinGame/monaco-jsonrpc) libraries
     - When a message arrives over the WebSocket, the message will be parsed by the relevant provider
     - E.g. the LSP sends a message saying there are 5 errors in the file → the errors provider will be triggered, adding the errors to monaco
 - Deploy the grid app files on the same server and feed them into the language server
 
 # Stretch goal
 
-- Understand how multiple language servers can be hooked into monaco with something like https://github.com/wylieconlon/jsonrpc-ws-proxy
+- Understand how multiple language servers can be hooked into monaco with something like [json-ws-proxy](https://github.com/wylieconlon/jsonrpc-ws-proxy)
 
 # POC Open Questions
 
