@@ -1,4 +1,4 @@
-# wix-code-lsp-poc
+# typescript-lsp-poc
 
 🗣 [monaco-editor](https://github.com/microsoft/monaco-editor) is the code editor which powers [VS Code](https://github.com/microsoft/vscode), with the features better described [here](https://code.visualstudio.com/docs/editor/editingevolved).
 
