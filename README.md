@@ -41,7 +41,6 @@ Hopefully by the end of the POC we will have answers to these questions:
 - What’s the backend effort of this task?
 - How will you sync the user’s changes to the grid app?
 - Can `typescript-language-server` work against remote files?
-- `wix-code-types`
 
 ## Resources
 
