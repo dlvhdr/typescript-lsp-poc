@@ -1,0 +1,7 @@
+{
+    "references": [
+        { "path" : "backend/tsconfig.json" },
+        { "path" : "pages/tsconfig.json" },
+        { "path" : "public/tsconfig.json" }
+    ]
+}

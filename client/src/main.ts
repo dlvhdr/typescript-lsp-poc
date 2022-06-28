@@ -37,7 +37,7 @@ import { TextModelService } from "./TextModelService";
 
 monaco.languages.register({
   id: "typescript",
-  extensions: [".ts", ".tsx"],
+  extensions: [".ts", ".tsx", "js", "jsx"],
   aliases: ["TypeScript", "ts", "typescript"],
   mimetypes: ["text/typescript"],
 });
@@ -55,7 +55,8 @@ const editor = monaco.editor.create(root, undefined, {
   textModelService: new TextModelService(),
 });
 
-const rootUri = "file:///Users/dolevh/code/personal/hebrew-touch-typing";
+// what makes the server to look for the siteSample dir?
+const rootUri = "file:///Users/kobin/dev/typescript-lsp-poc/statics";
 MonacoServices.install(monaco, {
   rootUri,
 });
@@ -73,7 +74,7 @@ webSocket.onopen = async () => {
   await languageClient.start();
   reader.onClose(() => languageClient.stop());
   const newModel = await createModel(
-    monaco.Uri.parse(`${rootUri}/src/index.tsx`)
+    monaco.Uri.parse(`${rootUri}/backend/main.ts`)
   );
   editor.setModel(newModel!);
 };

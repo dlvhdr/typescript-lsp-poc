@@ -5,16 +5,21 @@ export const createModel = async (
   uri: monaco.Uri
 ): Promise<monaco.editor.ITextModel> => {
   const rootUri = MonacoServices.get().workspace.rootUri;
+  
+  // const rootUri = "file://users/kobin/dev/typescript-lsp-poc/statics/";
   if (!rootUri) {
     throw new Error("No root Uri");
   }
-  const existingModel = monaco.editor.getModel(uri);
-  if (existingModel !== null) {
-    return existingModel;
+  if(monaco.editor) {
+    const existingModel = monaco.editor.getModel(uri);
+    if (existingModel !== null) {
+      return existingModel;
+    }
   }
+  
 
   const relativeUri = uri.toString().replace(rootUri, "");
-  const url = `http://localhost:3000/${relativeUri}`;
+  const url = `http://localhost:3001/${relativeUri}`;
   console.log(`[DEBUG] fetching ${url}`);
   const fileContents = await fetch(url, {
     method: "GET",
