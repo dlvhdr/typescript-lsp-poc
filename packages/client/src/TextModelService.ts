@@ -1,6 +1,5 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
-import { createModel } from "./models";
-
+import { createModel, createTab } from "./models";
 // @ts-ignore
 import { ImmortalReference } from "monaco-editor/esm/vs/base/common/lifecycle";
 // @ts-ignore
@@ -27,6 +26,7 @@ StandaloneCodeEditorService.prototype.doOpenEditor = function (
     return null;
   }
   editor.setModel(model);
+  createTab(editor, model);
   var selection = input.options ? input.options.selection : null;
   if (selection) {
     if (
@@ -83,56 +83,3 @@ export class TextModelService {
     return model;
   }
 }
-
-// export interface ITextModelService {
-// 	readonly _serviceBrand: undefined;
-//
-// 	/**
-// 	 * Provided a resource URI, it will return a model reference
-// 	 * which should be disposed once not needed anymore.
-// 	 */
-// 	createModelReference(resource: URI): Promise<IReference<IResolvedTextEditorModel>>;
-//
-// 	/**
-// 	 * Registers a specific `scheme` content provider.
-// 	 */
-// 	registerTextModelContentProvider(scheme: string, provider: ITextModelContentProvider): IDisposable;
-//
-// 	/**
-// 	 * Check if the given resource can be resolved to a text model.
-// 	 */
-// 	canHandleResource(resource: URI): boolean;
-// }
-
-// function SomeTextModelService() {}
-// SomeTextModelService.prototype = {
-//   createModelReference: function (uri) {
-//     return this.getModel(uri);
-//   },
-//   registerTextModelContentProvider: function () {
-//     return { dispose: function () {} };
-//   },
-//   hasTextModelContentProvider: function (schema) {
-//     return true;
-//   },
-//   _buildReference: function (model) {
-//     var lifecycle = require("vs/base/common/lifecycle");
-//     var ref = new lifecycle.ImmortalReference({ textEditorModel: model });
-//     return {
-//       object: ref.object,
-//       dispose: function () {
-//         ref.dispose();
-//       },
-//     };
-//   },
-//   getModel: function (uri) {
-//     var _this = this;
-//     return new Promise(function (r) {
-//       var model = monaco.editor.getModel(uri);
-//       if (!model) {
-//         /* ajax.get('http://path/to/file').then(function (contents) { r(monaco.editor.createModel(contents, 'javascript', uri)); return; }) */
-//       }
-//       r(_this._buildReference(model));
-//     });
-//   },
-// };

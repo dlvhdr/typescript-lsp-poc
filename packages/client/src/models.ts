@@ -1,40 +1,45 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
-import { MonacoServices } from "monaco-languageclient";
 
 export const createModel = async (
   uri: monaco.Uri
 ): Promise<monaco.editor.ITextModel> => {
-  const rootUri = MonacoServices.get().workspace.rootPath;
-  if (!rootUri) {
-    throw new Error("No root Uri");
-  }
   const existingModel = monaco.editor.getModel(uri);
   if (existingModel !== null) {
     return existingModel;
   }
 
-  const relativeUri = uri.toString().replace(rootUri, "");
-  const url = `http://localhost:3000/${relativeUri}`;
-  console.log(`[DEBUG] fetching ${url}`);
+  const url = `http://localhost:3001/${uri.fsPath}`;
   const fileContents = await fetch(url, {
     method: "GET",
     mode: "cors",
   })
     .then(async (res) => {
       const text = await res.text();
-      console.log("[DEBUG] Fetched file", { text });
       return text;
     })
-    .catch((e) => console.error("wow error", e));
+    .catch((e) => console.error(e));
 
-  const newModel = monaco.editor.createModel(fileContents!, undefined, uri);
-  // editor.setModel(newModel);
+  return monaco.editor.createModel(fileContents!, undefined, uri);
+};
+
+export const createTab = (
+  editor: monaco.editor.IStandaloneCodeEditor,
+  model: monaco.editor.ITextModel
+) => {
+  const uri = model.uri;
   const tabs = window.document.querySelector(".tabs");
+
+  const existingTabs = Array.from(tabs?.querySelectorAll("div") ?? []).map(
+    (tab) => tab.innerText
+  );
+  if (existingTabs.includes(uri.toString())) {
+    return;
+  }
+
   const node = window.document.createElement("div");
-  node.textContent = relativeUri;
-  // node.onclick = () => {
-  //   editor.setModel(newModel);
-  // };
+  node.textContent = uri.toString();
+  node.onclick = () => {
+    editor.setModel(model);
+  };
   tabs!.appendChild(node);
-  return newModel;
 };

@@ -38,6 +38,12 @@ export function launch(socket: rpc.IWebSocket) {
       if (message.method === lsp.InitializeRequest.type.method) {
         const initializeParams = message.params as lsp.InitializeParams;
         console.log("[Server] InitializeParams", initializeParams);
+        initializeParams.workspaceFolders = [
+          {
+            name: "velo",
+            uri: `file://${__dirname}/../../statics/`,
+          },
+        ];
         initializeParams.processId = process.pid;
       }
     }

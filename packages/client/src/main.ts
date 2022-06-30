@@ -32,7 +32,7 @@ import {
   WebSocketMessageWriter,
 } from "@codingame/monaco-jsonrpc";
 import monacoTokensProvider from "./monarch";
-import { createModel } from "./models";
+import { createModel, createTab } from "./models";
 import { TextModelService } from "./TextModelService";
 
 monaco.languages.register({
@@ -53,10 +53,7 @@ const editor = monaco.editor.create(root, undefined, {
   textModelService: new TextModelService(),
 });
 
-const rootPath = "file:///Users/dolevh/code/personal/hebrew-touch-typing";
-MonacoServices.install({
-  rootPath,
-});
+MonacoServices.install();
 
 const url = createUrl("localhost", 3001, "/sampleServer");
 const webSocket = new WebSocket(url);
@@ -70,10 +67,9 @@ webSocket.onopen = async () => {
   });
   await languageClient.start();
   reader.onClose(() => languageClient.stop());
-  const newModel = await createModel(
-    monaco.Uri.parse(`${rootPath}/src/index.tsx`)
-  );
+  const newModel = await createModel(monaco.Uri.parse(`/pages/home.ts`));
   editor.setModel(newModel!);
+  createTab(editor, newModel);
 };
 
 function createLanguageClient(
