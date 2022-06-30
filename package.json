@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "repository": "https://github.com/dlvhdr/typescript-lsp-poc",
+  "author": "Dolev Hadar <dolevh@wix.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=7.10.0"
+  },
+  "workspaces": [
+    "packages/server",
+    "packages/client"
+  ],
+  "scripts": {
+    "start-server": "npm run start --workspace=packages/server",
+    "dev": "npm run dev --workspace=packages/client",
+    "build": "npm run build --workspaces"
+  }
+}

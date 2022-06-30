@@ -2,15 +2,12 @@
 
 🗣 [monaco-editor](https://github.com/microsoft/monaco-editor) is the code editor which powers [VS Code](https://github.com/microsoft/vscode), with the features better described [here](https://code.visualstudio.com/docs/editor/editingevolved).
 
-## POC Progress
-
-Commits:
-
-1. Skeleton - initial server implementation that runs the `typescript-language-server` and exposes a socket endpoint
-2. Simple client implementation - manually sending `initialize` LSP message from the client successfully
-3. Connecting with `monaco-languageclient` and rendering the monaco editor.
-Workve
-4. Overriding monaco services to create missing monaco models by downloading them from a local `serve` server.
+# Getting Started
+```
+fnm use
+npm install
+npm run build
+```
 
 # What?
 
