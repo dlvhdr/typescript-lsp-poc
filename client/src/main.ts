@@ -14,7 +14,10 @@ import "monaco-editor/esm/vs/editor/standalone/browser/referenceSearch/standalon
 import "monaco-editor/esm/vs/editor/standalone/browser/toggleHighContrast/toggleHighContrast.js";
 
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
-
+import "./code-code/theme"
+import "./code-code/registerCompletionItemProvider"
+import { EDITOR_OPTINS, DEFAULT_LANGUAGE, LANG_CONF } from "./code-code/consts"
+import {setModulesCompletions} from "./code-code/monacoCompletions/wixModules";
 import { buildWorkerDefinition } from "monaco-editor-workers";
 buildWorkerDefinition("dist", new URL("", window.location.href).href, false);
 
@@ -34,27 +37,75 @@ import {
 import monacoTokensProvider from "./monarch";
 import { createModel } from "./models";
 import { TextModelService } from "./TextModelService";
+//@ts-ignore
+window.getFileContext = () => {
+  // @ts-ignore
+  const uri = window.editor.getModel().uri.toString();
+  console.log("################################################################################", uri);
+  if(uri.includes("/page/")) {
+    return "page";
+  }
+  if(uri.includes("/backend/")) {
+    return "backend";
+  }
+  if(uri.includes("/public/")) {
+    return "public";
+  }
+  return "page";
+}
+
+
 
 monaco.languages.register({
-  id: "typescript",
+  id: DEFAULT_LANGUAGE,
   extensions: [".ts", ".tsx", "js", "jsx"],
-  aliases: ["TypeScript", "ts", "typescript"],
-  mimetypes: ["text/typescript"],
+  aliases: ["TypeScript", "ts", DEFAULT_LANGUAGE],
+  mimetypes: [`text/${DEFAULT_LANGUAGE}`],
 });
 
 monaco.languages.setMonarchTokensProvider(
-  "typescript",
+  DEFAULT_LANGUAGE,
   monacoTokensProvider as monaco.languages.IMonarchLanguage
 );
+
+const _setLanguageConfiguration = monaco.languages.setLanguageConfiguration;
+
+monaco.languages.setLanguageConfiguration = (
+  languageId: string,
+  conf: monaco.languages.LanguageConfiguration,
+): monaco.IDisposable => {
+  conf.autoClosingPairs = [{ open: "(", close: ")" }, { open: "[", close: "]"}, { open: "{", close: "}"}, { open: "\"", close: "\""}, { open: "'", close: "'"}];
+  if (languageId === DEFAULT_LANGUAGE) {
+    // Intentionally leave out "#" although Monaco ships with it, since it screws up code completion with nicknames
+    conf.wordPattern = /(-?\d*\.\d\w*)|([^`~!@%^&*()=+[{\]}\\|;:'",.<>/?\s]+)/g;
+  }
+
+  return _setLanguageConfiguration(languageId, conf);
+};
+// @ts-ignore
+monaco.languages.setLanguageConfiguration(DEFAULT_LANGUAGE, LANG_CONF);
+
+
 
 const root = document.querySelector<HTMLDivElement>("#root")!;
 
 // const allModels = [];
 
-const editor = monaco.editor.create(root, undefined, {
+const editor = monaco.editor.create(root, EDITOR_OPTINS, {
   textModelService: new TextModelService(),
 });
+//@ts-ignore
+window.editor = editor
 
+editor.onDidChangeModel(
+  async ({
+    oldModelUrl,
+    newModelUrl,
+  }: monaco.editor.IModelChangedEvent) => {
+    console.log("################################################################################", oldModelUrl);
+    console.log("################################################################################", newModelUrl);
+    setModulesCompletions();
+  })
 // what makes the server to look for the siteSample dir?
 const rootUri = "file:///Users/kobin/dev/typescript-lsp-poc/statics";
 MonacoServices.install(monaco, {
@@ -74,7 +125,7 @@ webSocket.onopen = async () => {
   await languageClient.start();
   reader.onClose(() => languageClient.stop());
   const newModel = await createModel(
-    monaco.Uri.parse(`${rootUri}/backend/main.ts`)
+    monaco.Uri.parse(`${rootUri}/page/home.ts`)
   );
   editor.setModel(newModel!);
 };

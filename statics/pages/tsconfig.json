@@ -1,3 +1,0 @@
-{
-    "extends": "@wix/wix-code-types/configs/tsconfig.page.json"
-}

@@ -1,14 +1,15 @@
 {
-    "extends": "@wix/wix-code-types/configs/tsconfig.backend.json",
+    "extends": "@wix/wix-code-types/configs/tsconfig.page.json",
     "compilerOptions": {
         "paths": {
             "public/*": [
                 "../public/*"
             ],
             "backend/*": [
-                "./backend/*"
-            ]
+                "../backend/*"
+            ],
         },
         "baseUrl": "./"
-    }
+    },
+
 }

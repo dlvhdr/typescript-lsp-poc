@@ -1,7 +1,8 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import { createModel } from "./models";
+// @ts-ignore
 import { ImmortalReference } from "monaco-editor/esm/vs/base/common/lifecycle";
-
+// @ts-ignore
 import { StandaloneCodeEditorService } from "monaco-editor/esm/vs/editor/standalone/browser/standaloneCodeEditorService";
 
 StandaloneCodeEditorService.prototype.findModel = function (
@@ -49,9 +50,9 @@ export class TextModelService {
   readonly _serviceBrand = undefined;
 
   async createModelReference(resource: monaco.Uri) {
-    console.log("[DEBUG] createModelReference?", resource);
+    // console.log("[DEBUG] createModelReference?", resource);
     const model = await this.getModel(resource);
-    console.log("[DEBUG] created model", model);
+    // console.log("[DEBUG] created model", model);
 
     return new ImmortalReference({ textEditorModel: model });
   }
@@ -60,7 +61,7 @@ export class TextModelService {
    * Registers a specific `scheme` content provider.
    */
   registerTextModelContentProvider(scheme: string, provider: any) {
-    console.log("[DEBUG] registerTextModelContentProvider?", scheme, provider);
+    // console.log("[DEBUG] registerTextModelContentProvider?", scheme, provider);
     return { dispose: function () {} };
   }
 
@@ -68,7 +69,7 @@ export class TextModelService {
    * Check if the given resource can be resolved to a text model.
    */
   canHandleResource(resource: monaco.Uri): boolean {
-    console.log("[DEBUG] canHandleResource?", resource);
+    // console.log("[DEBUG] canHandleResource?", resource);
     return true;
   }
 
