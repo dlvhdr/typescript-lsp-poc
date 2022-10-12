@@ -2,11 +2,12 @@ import path from "path";
 import express from "express";
 import http from "http";
 import net from "net";
+import cors from "cors";
 import * as ws from "ws";
 import url from "url";
 import * as rpc from "@codingame/monaco-jsonrpc";
 import { launch } from "./launch";
-import cors from "cors";
+import { WORKSPACE_PATH } from "./consts";
 
 const app = express();
 app.use(cors());
@@ -24,6 +25,10 @@ const server = app.listen(3001, () => {
 const wss = new ws.Server({
   noServer: true,
   perMessageDeflate: false,
+});
+
+app.get("/root", (req, res) => {
+  res.send(`file://${WORKSPACE_PATH}`);
 });
 
 server.on(

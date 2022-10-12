@@ -19,7 +19,8 @@
     "vite": "2.9.6"
   },
   "resolutions": {
-    "vscode-languageserver-types": "3.17.1"
+    "vscode-languageserver-types": "3.17.1",
+    "@codingame/monaco-vscode-api": "1.67.20"
   },
   "engines": {
     "node": ">=16.0.0",
@@ -30,8 +31,9 @@
     "packages/client"
   ],
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "start-server": "npm run start --workspace=packages/server",
     "dev": "vite --debug --force",
-    "build": "npm run build --workspaces"
+    "build": "cd ./statics && npm i && cd ../ && npm run build --workspaces"
   }
 }

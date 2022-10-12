@@ -8,7 +8,27 @@
     <style src="src/style.css"></style>
   </head>
   <body>
-    <div class="tabs"></div>
-    <div id="root" style="height: 100vh"></div>
+    <header><button id="new-file">Add</button></header>
+    <dialog id="add-file-dialog">
+      <div class="edit">
+        <h3>A new file</h3>
+        <div>
+          <input type="text" placeholder="File name" id="file-name" />
+        </div>
+        <div>
+          <textarea
+            rows="30"
+            cols="100"
+            placeholder="File content"
+            id="file-content"
+          ></textarea>
+        </div>
+        <form method="dialog">
+          <button id="add-file-dialog-button">Add File</button>
+        </form>
+      </div>
+    </dialog>
+    <div id="tabs"></div>
+    <div id="editor" style="display: flex; flex-direction: row"></div>
   </body>
 </html>
