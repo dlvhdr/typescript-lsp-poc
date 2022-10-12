@@ -1,4 +1,8 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import {
+  ICodeEditorService,
+  StandaloneServices,
+} from "@codingame/monaco-vscode-api/services";
 
 export const createModel = async (
   uri: monaco.Uri
@@ -7,39 +11,83 @@ export const createModel = async (
   if (existingModel !== null) {
     return existingModel;
   }
+  const fileContents = await fetchResource(uri);
 
-  const url = `http://localhost:3001/${uri.fsPath}`;
+  return monaco.editor.createModel(fileContents!, undefined, uri);
+};
+
+export const fetchResource = async (uri: monaco.Uri): Promise<string> => {
+  let fsPath = uri.fsPath;
+  if (
+    fsPath.startsWith("backend/") &&
+    !fsPath.endsWith(".jsw.ts") &&
+    !fsPath.endsWith(".jsw.d.ts")
+  ) {
+    fsPath = fsPath.replace(/\.ts$/, ".jsw.ts");
+  }
+  const url = `http://localhost:3001/${fsPath}`;
   const fileContents = await fetch(url, {
     method: "GET",
     mode: "cors",
   })
     .then(async (res) => {
+      if (res.status === 404) {
+        throw new Error("Not found");
+      }
       const text = await res.text();
       return text;
     })
-    .catch((e) => console.error(e));
+    .catch((e) => {
+      console.error(`Original error`, e);
+      throw new Error(`Model ${uri.fsPath} wasn't found. Url: ${url}`);
+    });
 
-  return monaco.editor.createModel(fileContents!, undefined, uri);
+  return String(fileContents);
 };
 
-export const createTab = (
-  editor: monaco.editor.IStandaloneCodeEditor,
-  model: monaco.editor.ITextModel
-) => {
-  const uri = model.uri;
-  const tabs = window.document.querySelector(".tabs");
+export const createTab = (uri: monaco.Uri) => {
+  const tabs = window.document.querySelector("#tabs");
 
-  const existingTabs = Array.from(tabs?.querySelectorAll("div") ?? []).map(
+  const existingTabs = Array.from(tabs?.querySelectorAll("button") ?? []).map(
     (tab) => tab.innerText
   );
   if (existingTabs.includes(uri.toString())) {
     return;
   }
 
-  const node = window.document.createElement("div");
-  node.textContent = uri.toString();
-  node.onclick = () => {
-    editor.setModel(model);
+  const node = window.document.createElement("button");
+  node.textContent = uri.fsPath;
+  node.onclick = async () => {
+    const codeEditorService = StandaloneServices.get(ICodeEditorService);
+    const newCodeEditor = await codeEditorService.openCodeEditor(
+      { resource: uri },
+      null
+    );
+    newCodeEditor != null && appendCodeEditorToBody(newCodeEditor);
+    removeActiveTabClass();
+    node.classList.add("active");
   };
+  removeActiveTabClass();
+  node.classList.add("active");
   tabs!.appendChild(node);
+};
+
+const removeActiveTabClass = () => {
+  document
+    .querySelectorAll("#tabs > button")
+    .forEach((tab) => tab.classList.remove("active"));
+};
+
+export const appendCodeEditorToBody = (editor: monaco.editor.ICodeEditor) => {
+  const codeEditorService = StandaloneServices.get(ICodeEditorService);
+  const allCodeEditors = codeEditorService.listCodeEditors();
+  //@ts-ignore
+  allCodeEditors.forEach((codeEditor) =>
+    codeEditor.getContainerDomNode().remove()
+  );
+  document.body.append(editor.getContainerDomNode());
+  editor.focus();
+
+  //@ts-ignore
+  window.editor = editor;
 };

@@ -1,0 +1,13 @@
+{
+  "extends": "@wix/wix-code-types/configs/tsconfig.page.json",
+  "compilerOptions": {
+    "paths": {
+      "public/*": ["../public/*", "../public/*.ts"],
+      "backend/*.jsw.ts": [""],
+      "backend/*.ts": ["../backend/*"],
+      "backend/*.jsw": ["../backend/*.jsw.d.ts"],
+      "backend/*": ["../backend/*.ts", "../backend/*.jsw.d.ts"]
+    },
+    "baseUrl": "./"
+  }
+}

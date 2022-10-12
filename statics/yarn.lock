@@ -17,10 +17,10 @@
     "@babel/runtime" "^7.0.0"
     "tslib" "^2.0.0"
 
-"@wix/wix-code-types@^1.0.160":
-  "integrity" "sha1-YZlPkOnFnAWAfBHmZQB4qlqIKeg= sha512-9XpIyVCG2124G1I0ehnl+9bnpuXF/O1cJf7iIDbmrZVRPa9kSQ4JIhZSjkxKird1MGLcbNMw6QPS9FzQWic9Wg=="
-  "resolved" "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/@wix/wix-code-types/-/wix-code-types-1.0.319.tgz"
-  "version" "1.0.319"
+"@wix/wix-code-types@^2.0.0":
+  "integrity" "sha1-TJMnG9TvJsqZm5z3pWhrqzYjwY8="
+  "resolved" "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/@wix/wix-code-types/-/wix-code-types-2.0.34.tgz"
+  "version" "2.0.34"
   dependencies:
     "@wix/wix-code-common" "^1.0.0"
 

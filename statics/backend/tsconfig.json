@@ -1,3 +1,13 @@
 {
-    "extends": "@wix/wix-code-types/configs/tsconfig.backend.json"
+  "extends": "@wix/wix-code-types/configs/tsconfig.backend.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "paths": {
+      "backend/*": [
+        "./*"
+      ],
+      "public/*": ["../public/*"],
+    },
+    "baseUrl": "./",
+  }
 }

@@ -1,5 +1,6 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
-import { createModel, createTab } from "./models";
+import { DEFAULT_LANGUAGE } from "./code-code/consts";
+import { createTab, fetchResource } from "./models";
 // @ts-ignore
 import { ImmortalReference } from "monaco-editor/esm/vs/base/common/lifecycle";
 // @ts-ignore
@@ -25,8 +26,14 @@ StandaloneCodeEditorService.prototype.doOpenEditor = function (
   if (!model) {
     return null;
   }
+  if (model.uri.toString().includes(".jsw.d.ts")) {
+    model = this.findModel(
+      editor,
+      model.uri.toString().replace(".jsw.d.ts", ".jsw.ts")
+    );
+  }
   editor.setModel(model);
-  createTab(editor, model);
+  createTab(model);
   var selection = input.options ? input.options.selection : null;
   if (selection) {
     if (
@@ -51,9 +58,7 @@ export class TextModelService {
   readonly _serviceBrand = undefined;
 
   async createModelReference(resource: monaco.Uri) {
-    console.log("[DEBUG] createModelReference?", resource);
     const model = await this.getModel(resource);
-    console.log("[DEBUG] created model", model);
 
     return new ImmortalReference({ textEditorModel: model });
   }
@@ -61,25 +66,44 @@ export class TextModelService {
   /**
    * Registers a specific `scheme` content provider.
    */
-  registerTextModelContentProvider(scheme: string, provider: any) {
-    console.log("[DEBUG] registerTextModelContentProvider?", scheme, provider);
+  registerTextModelContentProvider(_scheme: string, _provider: any) {
     return { dispose: function () {} };
   }
 
   /**
    * Check if the given resource can be resolved to a text model.
    */
-  canHandleResource(resource: monaco.Uri): boolean {
-    console.log("[DEBUG] canHandleResource?", resource);
+  canHandleResource(_resource: monaco.Uri): boolean {
     return true;
+  }
+
+  handleJSW(uri: monaco.Uri, jswContent: string): void {
+    let uriStr = uri.toString();
+    if (uriStr.includes(".jsw.ts")) {
+      uriStr = uriStr.replace(".jsw.ts", ".jsw.d.ts");
+      const dtsModel = monaco.editor.getModel(monaco.Uri.parse(uriStr));
+      if (!dtsModel) {
+        //@ts-ignore
+        monaco.editor.createModel(
+          jswContent,
+          undefined,
+          monaco.Uri.parse(uriStr)
+        );
+      } else {
+        //@ts-ignore
+        dtsModel.setValue(jswContent);
+      }
+    }
   }
 
   async getModel(uri: monaco.Uri): Promise<monaco.editor.ITextModel> {
     var model = monaco.editor.getModel(uri);
     if (!model) {
-      return createModel(uri);
+      const modelContent = await fetchResource(uri);
+      this.handleJSW(uri, modelContent);
+      return monaco.editor.createModel(modelContent, DEFAULT_LANGUAGE, uri);
     }
-
+    this.handleJSW(uri, model.getValue());
     return model;
   }
 }

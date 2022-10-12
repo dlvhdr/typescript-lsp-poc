@@ -10,6 +10,7 @@ export default defineConfig({
     },
   },
   server: {
+    open: "/packages/client/index.html",
     port: 8080,
   },
 });
