@@ -17,7 +17,7 @@ export const createModel = async (
 };
 
 export const fetchResource = async (uri: monaco.Uri): Promise<string> => {
-  let fsPath = uri.fsPath;
+  let fsPath = uri.path;
   if (
     fsPath.startsWith("backend/") &&
     !fsPath.endsWith(".jsw.ts") &&
@@ -39,7 +39,7 @@ export const fetchResource = async (uri: monaco.Uri): Promise<string> => {
     })
     .catch((e) => {
       console.error(`Original error`, e);
-      throw new Error(`Model ${uri.fsPath} wasn't found. Url: ${url}`);
+      throw new Error(`Model ${uri.path} wasn't found. Url: ${url}`);
     });
 
   return String(fileContents);
